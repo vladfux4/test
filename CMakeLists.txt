@@ -25,6 +25,9 @@ add_executable(${PROJECT_NAME}
     "shared_block.h"
     "compute_worker.h"
     "compute_worker.cc"
+    "crc32_calculator.h"
+    "controller.h"
+    "controller.cc"
     "main.cc"
     )
 

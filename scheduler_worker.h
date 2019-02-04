@@ -31,7 +31,8 @@ struct SchedulerEvent {
 class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
  public:
   SchedulerWorker(boost::ptr_vector<GeneratorWorker>& generators,
-                  boost::ptr_vector<ComputeWorker>& computers);
+                  boost::ptr_vector<ComputeWorker>& computers,
+                  const size_t block_count);
   virtual ~SchedulerWorker();
 
   bool AcquireBlock();
@@ -57,6 +58,14 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
     SharedBlock block;
     uint32_t crc;
   };
+
+  void ProcessNewBlocks();
+  void ProcessResults();
+  bool CheckResults(const BlockData& data);
+  bool StoreBrokenBlock(const BlockData& data);
+  void CheckDoneCondition();
+
+  std::string SerializeResults(const std::vector<uint32_t>& results);
 
   const std::size_t kRequiredBlockCount;
   std::size_t generated_block_count_;

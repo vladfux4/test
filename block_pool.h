@@ -1,10 +1,10 @@
 #ifndef BLOCK_POOL_H_
 #define BLOCK_POOL_H_
 
-#include <boost/smart_ptr/allocate_shared_array.hpp>
-
 #include "static_pool_alloc.h"
 #include "shared_block.h"
+
+#include <boost/smart_ptr/allocate_shared_array.hpp>
 
 class BlockPool {
  public:
