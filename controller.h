@@ -12,7 +12,10 @@
 
 class Controller {
  public:
-  Controller();
+  Controller(const std::size_t block_size,
+             const std::size_t blocks_count,
+             const std::size_t generators_count,
+             const std::size_t computers_count);
 
   void Start();
 

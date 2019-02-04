@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
     CACHE STRING "Modules for CMake" FORCE)
 find_package(Boost 1.60 REQUIRED system thread)
 find_package(glog 0.3.5 REQUIRED)
-#find_package(gflags REQUIRED)
+find_package(gflags REQUIRED)
 
 #set(CMAKE_BUILD_TYPE Debug)
 
@@ -32,7 +32,4 @@ add_executable(${PROJECT_NAME}
     )
 
 target_link_libraries(${PROJECT_NAME}
-        LINK_PUBLIC ${Boost_LIBRARIES} glog pthread)
-
-#target_link_libraries(${PROJECT_NAME}
-	#LINK_PUBLIC ${Boost_LIBRARIES} glog gflags pthread)
+    LINK_PUBLIC ${Boost_LIBRARIES} glog gflags pthread)

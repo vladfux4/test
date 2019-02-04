@@ -1,21 +1,19 @@
 #include <glog/logging.h>
 #include "controller.h"
 
-const std::size_t kBlockSize = 8;
-const std::size_t kGeneratorsCount = 4;
-const std::size_t kComputersCount = 4;
-const std::size_t kBlockCount = 1000;
-
-Controller::Controller()
-    : block_pool_(kBlockSize),
-      scheduler_(generators_, computers_, kBlockCount),
+Controller::Controller(const std::size_t block_size,
+                       const std::size_t blocks_count,
+                       const std::size_t generators_count,
+                       const std::size_t computers_count)
+    : block_pool_(block_size),
+      scheduler_(generators_, computers_, blocks_count),
       computers_(),
       generators_() {
-  for (std::size_t i = 0; i < kComputersCount; ++i) {
+  for (std::size_t i = 0; i < computers_count; ++i) {
     computers_.push_back(new ComputeWorker(scheduler_));
   }
 
-  for (std::size_t i = 0; i < kGeneratorsCount; ++i) {
+  for (std::size_t i = 0; i < generators_count; ++i) {
     generators_.push_back(new GeneratorWorker(scheduler_, block_pool_));
   }
 }

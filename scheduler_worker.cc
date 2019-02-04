@@ -49,7 +49,7 @@ void SchedulerWorker::ProcessNewBlocks() {
   while (false == new_blocks_.empty()) {
     auto block = new_blocks_.front();
     new_blocks_.pop();
-      processed_new_block_count_++;
+    processed_new_block_count_++;
 
     VLOG(1) << "Process New Block: " << SerializeBlock(block);
     blocks_.push_back(BlockData(block, computers_.size()));
@@ -63,7 +63,7 @@ void SchedulerWorker::ProcessResults() {
   while (false == results_.empty()) {
     auto result = results_.front();
     results_.pop();
-      processed_result_count_++;
+    processed_result_count_++;
 
     VLOG(1) << "Process Result: "
             << SerializeBlock(result.block)
