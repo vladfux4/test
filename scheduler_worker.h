@@ -12,24 +12,12 @@
 #include "generator_worker.h"
 #include "compute_worker.h"
 
-struct SchedulerEvent {
-  enum class Type {
-    NEW_BLOCK,
-    CRC,
-  };
-
-  SchedulerEvent(const SharedBlock block)
-      : type(Type::NEW_BLOCK), block(block), crc(0) {}
-
-  SchedulerEvent(const SharedBlock block, const uint32_t crc)
-      : type(Type::CRC), block(block), crc(crc) {}
-
-  Type type;
+struct ResultEvent {
   SharedBlock block;
   uint32_t crc;
 };
 
-class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
+class SchedulerWorker : public ConsumerWorker<SharedBlock, ResultEvent> {
  public:
   SchedulerWorker(boost::ptr_vector<GeneratorWorker>& generators,
                   boost::ptr_vector<ComputeWorker>& computers,
@@ -38,7 +26,8 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
 
   bool AcquireBlock();
 
-  virtual void TakeEvent(const SchedulerEvent event) override;
+  virtual void TakeEvent(const SharedBlock event) override;
+  virtual void TakeEvent(const ResultEvent event) override;
   virtual void ProcessEvents() override;
 
  private:

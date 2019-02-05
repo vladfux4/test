@@ -31,12 +31,12 @@ bool SchedulerWorker::AcquireBlock() {
   return ret_val;
 }
 
-void SchedulerWorker::TakeEvent(const SchedulerEvent event) {
-  if (SchedulerEvent::Type::NEW_BLOCK == event.type) {
-    new_blocks_.push(event.block);
-  } else if (SchedulerEvent::Type::CRC == event.type) {
-    results_.push({event.block, event.crc});
-  }
+void SchedulerWorker::TakeEvent(const SharedBlock event) {
+  new_blocks_.push(event);
+}
+
+void SchedulerWorker::TakeEvent(const ResultEvent event) {
+  results_.push({event.block, event.crc});
 }
 
 void SchedulerWorker::ProcessEvents() {

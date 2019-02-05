@@ -34,7 +34,7 @@ void ComputeWorker::ProcessEvents() {
     error_index++;
 #endif // ENABLE_EVIL_ELECTRIC_FIELD
 
-    SchedulerEvent event(block, crc);
+    ResultEvent event{block, crc};
     scheduler_.PushEvent(event);
   }
 }

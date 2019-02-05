@@ -14,13 +14,12 @@ GeneratorWorker::~GeneratorWorker() {
 void GeneratorWorker::Routine() {
   while (true == consumer_.AcquireBlock()) {
     auto block = pool_.CreateBlock();
-    SchedulerEvent event(block);
 
     for (std::size_t i = 0; i < block.length; ++i) {
       block.data[i] = static_cast<uint8_t>(rand() % 256);
     }
 
     VLOG(1) << "Thr:" << id_ << " Generate Block: " << SerializeBlock(block);
-    consumer_.PushEvent(event);
+    consumer_.PushEvent(block);
   }
 }
