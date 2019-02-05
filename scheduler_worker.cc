@@ -132,7 +132,7 @@ void SchedulerWorker::CheckDoneCondition() {
   }
 }
 
-std::string SchedulerWorker::SerializeResults(const std::vector<uint32_t>& results) {
+std::string SchedulerWorker::SerializeResults(const BlockData::ResultData& results) {
   std::stringstream ss;
 
   for (std::size_t i = 0; i < results.size(); ++i) {

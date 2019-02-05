@@ -7,6 +7,7 @@
 #include <queue>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 #include "generator_worker.h"
 #include "compute_worker.h"
@@ -43,6 +44,8 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
  private:
 
   struct BlockData {
+    using ResultData = std::vector<uint32_t, boost::fast_pool_allocator<uint32_t>>;
+
     BlockData(SharedBlock block, std::size_t result_count)
         : block(block), results(),
           kRequiredResultCount(result_count) {
@@ -50,7 +53,7 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
     }
 
     SharedBlock block;
-    std::vector<uint32_t> results;
+    ResultData results;
     const size_t kRequiredResultCount;
   };
 
@@ -65,7 +68,7 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
   bool StoreBrokenBlock(const BlockData& data);
   void CheckDoneCondition();
 
-  std::string SerializeResults(const std::vector<uint32_t>& results);
+  std::string SerializeResults(const BlockData::ResultData& results);
 
   const std::size_t kRequiredBlockCount;
   std::size_t generated_block_count_;
@@ -75,7 +78,8 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
 
   std::queue<SharedBlock> new_blocks_;
   std::queue<ResultData> results_;
-  std::list<BlockData> blocks_;
+
+  std::list<BlockData, boost::fast_pool_allocator<BlockData>> blocks_;
 
   boost::ptr_vector<GeneratorWorker>& generators_;
   boost::ptr_vector<ComputeWorker>& computers_;
