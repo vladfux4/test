@@ -4,6 +4,7 @@
 #include "worker.h"
 #include <queue>
 #include <boost/thread.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 template<class Event>
 class ConsumerWorker : public Worker {
@@ -67,7 +68,7 @@ class ConsumerWorker : public Worker {
   boost::condition_variable cond_var_;
   bool notify;
   bool done;
-  std::queue<Event> events_;
+  std::queue<Event, std::deque<Event, boost::fast_pool_allocator<Event>>> events_;
 };
 
 #endif // CONSUMER_WORKER_H_

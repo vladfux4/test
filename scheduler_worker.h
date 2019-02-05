@@ -76,9 +76,8 @@ class SchedulerWorker : public ConsumerWorker<SchedulerEvent> {
   std::size_t processed_result_count_;
   boost::mutex generated_block_count_mutex_;
 
-  std::queue<SharedBlock> new_blocks_;
-  std::queue<ResultData> results_;
-
+  std::queue<SharedBlock, std::deque<SharedBlock, boost::fast_pool_allocator<SharedBlock>>> new_blocks_;
+  std::queue<ResultData, std::deque<ResultData, boost::fast_pool_allocator<ResultData>>> results_;
   std::list<BlockData, boost::fast_pool_allocator<BlockData>> blocks_;
 
   boost::ptr_vector<GeneratorWorker>& generators_;
