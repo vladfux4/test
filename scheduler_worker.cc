@@ -1,5 +1,6 @@
 #include "scheduler_worker.h"
 #include <sstream>
+#include <fstream>
 
 SchedulerWorker::SchedulerWorker(boost::ptr_vector<GeneratorWorker>& generators,
                                  boost::ptr_vector<ComputeWorker>& computers,
@@ -13,7 +14,8 @@ SchedulerWorker::SchedulerWorker(boost::ptr_vector<GeneratorWorker>& generators,
       results_(),
       blocks_(),
       generators_(generators),
-      computers_(computers) {
+      computers_(computers),
+      error_counter_(0) {
 }
 
 SchedulerWorker::~SchedulerWorker() {
@@ -112,8 +114,24 @@ bool SchedulerWorker::CheckResults(const SchedulerWorker::BlockData& data) {
   return status;
 }
 
-bool SchedulerWorker::StoreBrokenBlock(const SchedulerWorker::BlockData& data) {
-  LOG(ERROR) << "WRONG RESUT!";
+void SchedulerWorker::StoreBrokenBlock(const SchedulerWorker::BlockData& data) {
+  LOG(ERROR) << "Invalid Block";
+  std::stringstream ss;
+
+  ss << "invalid_crc_" << error_counter_
+     << "_" << std::hex << data.results[0] << ".dat";
+
+  std::cout << "Invalid Block: " << SerializeBlock(data.block)
+            << " CRC: " << SerializeResults(data.results)
+            << " filename:" << ss.str() << std::endl;
+
+  std::ofstream out(ss.str());
+  for (std::size_t i = 0; i < data.block.length; ++i) {
+    out << data.block.data[i];
+  }
+  out.close();
+
+  error_counter_++;
 }
 
 void SchedulerWorker::CheckDoneCondition() {

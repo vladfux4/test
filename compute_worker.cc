@@ -30,7 +30,7 @@ void ComputeWorker::ProcessEvents() {
 
 #ifdef ENABLE_EVIL_ELECTRIC_FIELD
     static uint32_t error_index = 0;
-    if (0 == (error_index) / 10) { crc = 0XFFFFFFFF; }
+    if (0 == (error_index % 100)) { crc = 0XFFFFFFFF; }
     error_index++;
 #endif // ENABLE_EVIL_ELECTRIC_FIELD
 

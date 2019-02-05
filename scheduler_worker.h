@@ -54,7 +54,7 @@ class SchedulerWorker : public ConsumerWorker<SharedBlock, ResultEvent> {
   void ProcessNewBlocks();
   void ProcessResults();
   bool CheckResults(const BlockData& data);
-  bool StoreBrokenBlock(const BlockData& data);
+  void StoreBrokenBlock(const BlockData& data);
   void CheckDoneCondition();
 
   std::string SerializeResults(const BlockData::ResultData& results);
@@ -71,6 +71,7 @@ class SchedulerWorker : public ConsumerWorker<SharedBlock, ResultEvent> {
 
   boost::ptr_vector<GeneratorWorker>& generators_;
   boost::ptr_vector<ComputeWorker>& computers_;
+  std::size_t error_counter_;
 };
 
 #endif // SCHEDULER_WORKER_H_
